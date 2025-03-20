@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  name      String   
+  createdAt DateTime  @default(now())
+  transactions Transaction[]
+  friendsAsUser1 Friend[] @relation("User1Friends")
+  friendsAsUser2 Friend[] @relation("User2Friends")
+  splits    Split[]
+}
+
+model Friend {
+  id        String   @id @default(uuid())
+  userId1   String
+  userId2   String
+  user1     User     @relation("User1Friends", fields: [userId1], references: [id])
+  user2     User     @relation("User2Friends", fields: [userId2], references: [id])
+  createdAt DateTime @default(now())
+  @@unique([userId1, userId2])
+  @@index([userId1])
+  @@index([userId2])
+}
+
+model Transaction {
+  id          String    @id @default(uuid())
+  description String
+  amount      Float   
+  date        DateTime
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  isSplit     Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  splits      Split[]
+  @@index([userId])
+}
+
+model Split {
+  id           String    @id @default(uuid())
+  transactionId String
+  userId       String
+  amountOwed   Decimal   @db.Decimal(10, 2)
+  transaction  Transaction @relation(fields: [transactionId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
+  createdAt    DateTime  @default(now())
+  @@index([transactionId])
+  @@index([userId])
+}

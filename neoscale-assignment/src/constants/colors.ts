@@ -1,0 +1,17 @@
+export const COLORS = {
+    background: '#ddf3ff',
+    bgWhite: '#FFFFFF', 
+    text: '#FFFFFF',       
+    primary: '#4285F4',    
+    buttonText: '#FFFFFF', 
+    accent: '#38A169',     
+    textDark: '#000000',
+    bannerBlue:"#0084ff",
+    textGray: '#718096',
+    success: '#38A169',
+    modalHeader:"#034079",
+    accentLight: '#EBF8FF',
+    border: '#E8ECEF',
+    disabled: '#A0AEC0',
+    error: '#E53E3E',   
+  };
